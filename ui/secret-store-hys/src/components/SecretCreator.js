@@ -1,5 +1,4 @@
 import { InputTextarea } from "primereact/inputtextarea";
-import { Password } from "primereact/password";
 import React, { useState, useRef } from "react";
 import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
@@ -7,6 +6,7 @@ import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { InputOtp } from "primereact/inputotp";
 
 // SecretCreator component to create a secret and show the secret link
 export default function SecretCreator() {
@@ -32,7 +32,6 @@ export default function SecretCreator() {
 
   // create secret
   function create() {
-    
     // validate content. if empty, show error
     if (content === null || content.length === 0) {
       showError("Secret content can not be empty.");
@@ -95,7 +94,6 @@ export default function SecretCreator() {
     axios
       .post(process.env.REACT_APP_API_URL + "/Secret", secret)
       .then((response) => {
-
         // if response status is not 200, show error
         if (response.status !== 200) {
           showError("Failed to create secret", "Error");
@@ -109,6 +107,12 @@ export default function SecretCreator() {
 
         // set is created to true, so we can hide the form
         setIsCreated(true);
+        navigator.clipboard.writeText(hostName + "/Secret/" + response.data);
+
+        setContent("");
+        setPinCode("");
+        setMeasurementValue(10);
+        setSelectedMeasurement({ name: "Minutes", code: "M" });
       })
       .catch((_) => {
         showError("Failed to create secret", "Error");
@@ -162,12 +166,12 @@ export default function SecretCreator() {
               <div className="flex align-items-center justify-content-center font-bold border-round m-2">
                 <div className="flex flex-column gap-2">
                   <label htmlFor="pwd1">Password</label>
-                  <Password
+                  <InputOtp
                     value={pinCode}
-                    onChange={(e) => setPinCode(e.target.value)}
-                    feedback={false}
-                    tabIndex={1}
-                    maxLength={6}
+                    onChange={(e) => setPinCode(e.value)}
+                    mask
+                    integerOnly
+                    length={6}
                   />
                 </div>
               </div>
@@ -199,16 +203,21 @@ export default function SecretCreator() {
             </div>
           </div>
           <div className="flex align-items-center justify-content-center font-bold m-2">
-            <Button label="Create" onClick={create} />
+            <Button label="Create" onClick={create} text />
           </div>
         </div>
       )}
 
       {secretLink !== null && secretLink.length > 0 && (
-        <div className="flex align-items-center justify-content-center font-bold m-2">
-          <Link className="p-button font-bold" id="home-link" to={secretLink}>
-            Secret link
-          </Link>
+        <div>
+          <div className="flex align-items-center justify-content-center font-bold m-2">
+            <span>Your secret was created. Link to secret saved in the clipboard.</span>
+          </div>
+          <div className="flex align-items-center justify-content-center font-bold m-2">
+            <Link className="p-button p-component p-button-text" id="home-link" to={secretLink}>
+              Open link
+            </Link>
+          </div>
         </div>
       )}
     </div>

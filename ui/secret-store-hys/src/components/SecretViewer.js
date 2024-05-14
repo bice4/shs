@@ -1,7 +1,7 @@
 import { Button } from "primereact/button";
 import { useParams } from "react-router";
 import { InputTextarea } from "primereact/inputtextarea";
-import { Password } from "primereact/password";
+import { InputOtp } from "primereact/inputotp";
 import React, { useState, useRef } from "react";
 import { Toast } from "primereact/toast";
 import axios from "axios";
@@ -32,7 +32,6 @@ export default function SecretViewer() {
     axios
       .get(process.env.REACT_APP_API_URL + "/Secret/" + id + "?pin=" + pinCode)
       .then((response) => {
-        console.log(response);
         if (response.status !== 200) {
           // if response status is 404, show error secret is not found
           if (response.status === 404) {
@@ -85,19 +84,20 @@ export default function SecretViewer() {
               <div className="flex align-items-center justify-content-center font-bold border-round m-2">
                 <div className="flex flex-column gap-2">
                   <label htmlFor="pwd1">Password</label>
-                  <Password
+
+                  <InputOtp
                     value={pinCode}
-                    onChange={(e) => setPinCode(e.target.value)}
-                    feedback={false}
-                    tabIndex={1}
-                    maxLength={6}
+                    onChange={(e) => setPinCode(e.value)}
+                    mask
+                    integerOnly
+                    length={6}
                   />
                 </div>
               </div>
             </div>
           </div>
           <div className="flex align-items-center justify-content-center font-bold m-2">
-            <Button label="Open" onClick={open} />
+            <Button label="Open" onClick={open} text/>
           </div>
         </div>
       )}
@@ -118,7 +118,7 @@ export default function SecretViewer() {
         </div>
       )}
       <div className="flex align-items-center justify-content-center h-4rem font-bold m-2">
-        <Link className="p-button font-bold" id="home-link" to="/">
+        <Link className="p-button p-component p-button-text" id="home-link" to="/">
           Home
         </Link>
       </div>
