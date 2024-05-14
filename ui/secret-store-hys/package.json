@@ -7,6 +7,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.6.8",
+    "env-cmd": "^10.1.0",
     "primeflex": "^3.3.1",
     "primereact": "^10.6.3",
     "react": "^18.2.0",
@@ -19,7 +20,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "start:mock": "env-cmd -f .env.mock react-scripts start",
+    "start:local": "env-cmd -f .env.local react-scripts start"
   },
   "eslintConfig": {
     "extends": [

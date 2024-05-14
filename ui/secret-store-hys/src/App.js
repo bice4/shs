@@ -1,10 +1,10 @@
-import "./App.css";
 import { PrimeReactProvider } from "primereact/api";
 import SecretViewer from "./components/SecretViewer";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import NotFound from "./components/NotFound/NotFound";
-import SecretCreator from "./components/SecretCreator/SecretCreator";
+import SecretCreator from "./components/SecretCreator";
 export default function App() {
+  // create router with routes for secret creator, secret viewer, and not found
   const router = createBrowserRouter([
     {
       path: "/",
