@@ -75,7 +75,7 @@ export default function SecretViewer() {
       <Toast ref={toast} />
 
       <div className="flex align-items-center justify-content-center font-bold m-2">
-        <h2 className="text-4xl">Secret store HYS</h2>
+        <h2 className="text-4xl">Secret store</h2>
       </div>
       {pinCodeVisible && (
         <div>
@@ -83,7 +83,7 @@ export default function SecretViewer() {
             <div className="flex align-items-stretch flex-wrap">
               <div className="flex align-items-center justify-content-center font-bold border-round m-2">
                 <div className="flex flex-column gap-2">
-                  <label htmlFor="pwd1">Password</label>
+                  <label htmlFor="pwd1">Pin code (only numbers)</label>
 
                   <InputOtp
                     value={pinCode}
@@ -97,7 +97,7 @@ export default function SecretViewer() {
             </div>
           </div>
           <div className="flex align-items-center justify-content-center font-bold m-2">
-            <Button label="Open" onClick={open} text/>
+            <Button label="Open" onClick={open} text />
           </div>
         </div>
       )}
@@ -118,7 +118,11 @@ export default function SecretViewer() {
         </div>
       )}
       <div className="flex align-items-center justify-content-center h-4rem font-bold m-2">
-        <Link className="p-button p-component p-button-text" id="home-link" to="/">
+        <Link
+          className="p-button p-component p-button-text"
+          id="home-link"
+          to="/"
+        >
           Home
         </Link>
       </div>

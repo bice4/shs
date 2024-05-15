@@ -51,7 +51,7 @@ export default function SecretCreator() {
     }
 
     // validate expire in. if greater than 99, show error
-    if (selectedMeasurement.code === "D" && measurementValue >= 99) {
+    if (selectedMeasurement.code === "D" && measurementValue > 99) {
       showError("Expiration date is too big.");
       return;
     }
@@ -142,7 +142,7 @@ export default function SecretCreator() {
       <Toast ref={toast} />
 
       <div className="flex align-items-center justify-content-center font-bold m-2">
-        <h2 className="text-4xl">Secret store HYS</h2>
+        <h2 className="text-4xl">Secret store</h2>
       </div>
 
       {!isCreated && (
@@ -165,7 +165,7 @@ export default function SecretCreator() {
             <div className="flex align-items-stretch flex-wrap">
               <div className="flex align-items-center justify-content-center font-bold border-round m-2">
                 <div className="flex flex-column gap-2">
-                  <label htmlFor="pwd1">Password</label>
+                  <label htmlFor="pwd1">Pin code (only numbers)</label>
                   <InputOtp
                     value={pinCode}
                     onChange={(e) => setPinCode(e.value)}
@@ -211,10 +211,16 @@ export default function SecretCreator() {
       {secretLink !== null && secretLink.length > 0 && (
         <div>
           <div className="flex align-items-center justify-content-center font-bold m-2">
-            <span>Your secret was created. Link to secret saved in the clipboard.</span>
+            <span>
+              Your secret was created. Link to secret saved in the clipboard.
+            </span>
           </div>
           <div className="flex align-items-center justify-content-center font-bold m-2">
-            <Link className="p-button p-component p-button-text" id="home-link" to={secretLink}>
+            <Link
+              className="p-button p-component p-button-text"
+              id="home-link"
+              to={secretLink}
+            >
               Open link
             </Link>
           </div>
