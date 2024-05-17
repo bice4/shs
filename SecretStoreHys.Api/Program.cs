@@ -1,4 +1,3 @@
-using System.Text;
 using SecretStoreHys.Api;
 using SecretStoreHys.Api.Services;
 
@@ -11,9 +10,9 @@ builder.Services.AddControllers();
 builder.Services.AddTransient<ISecretService, SecretService>();
 builder.Services.AddHostedService<SecretsCleanerJob>();
 
-builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+builder.Services.AddCors(o => o.AddPolicy("MyPolicy", corsPolicyBuilder =>
 {
-    builder
+    corsPolicyBuilder
         .AllowAnyOrigin()
         .AllowAnyMethod()
         .AllowAnyHeader();

@@ -1,17 +1,24 @@
 ﻿using System.Security.Cryptography;
 using Microsoft.AspNetCore.Mvc;
-using SecretStoreHys.Api.Models;
+using SecretStoreHys.Api.Models.Requests;
 using SecretStoreHys.Api.Services;
 
 namespace SecretStoreHys.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class SecretController(ISecretService secretService, ILogger<SecretController> logger)
+[Produces("application/json")]
+public sealed class SecretController(ISecretService secretService, ILogger<SecretController> logger)
     : ControllerBase
 {
+    /// <summary>
+    /// Creates a new secret.
+    /// </summary>
+    /// <param name="request"><see cref="CreateSecretRequest"/></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>The unique identifier of the secret.</returns>
     [HttpPost]
-    public async Task<IActionResult> CreateSecretAsync([FromBody] CreateSecretRequest request)
+    public async Task<IActionResult> CreateSecretAsync([FromBody] CreateSecretRequest request, CancellationToken cancellationToken)
     {
         try
         {
@@ -22,7 +29,8 @@ public class SecretController(ISecretService secretService, ILogger<SecretContro
                 return BadRequest("Public pin is required");
 
             var secret = await secretService.CreateSecretAsync(request.Content,
-                request.ExpirationDate, request.PublicPin, CancellationToken.None);
+                request.ExpirationDate, request.PublicPin, cancellationToken);
+            
             return Ok(secret.Id.ToString("N"));
         }
         catch (InvalidOperationException ioe)
@@ -37,6 +45,13 @@ public class SecretController(ISecretService secretService, ILogger<SecretContro
         }
     }
 
+    /// <summary>
+    /// Gets the content of a secret.
+    /// </summary>
+    /// <param name="id">Unique identifier of the secret.</param>
+    /// <param name="pin">The pin of the secret.</param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>The content of the secret.</returns>
     [HttpGet("{id}")]
     public async Task<IActionResult> GetSecretAsync(string id, [FromQuery] string pin,
         CancellationToken cancellationToken)
