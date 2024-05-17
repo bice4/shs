@@ -12,14 +12,7 @@ public sealed class SecretService : ISecretService
 
     private readonly string _secretsFolder = Path.Combine(Directory.GetCurrentDirectory(), SECRET_FOLDER);
 
-    /// <summary>
-    /// Creates a new secret.
-    /// </summary>
-    /// <param name="content">The content of the secret.</param>
-    /// <param name="expirationDate">The expiration date of the secret.</param>
-    /// <param name="publicPin">The public pin of the secret.</param>
-    /// <param name="cancellationToken">The cancellation token.</param>
-    /// <returns><see cref="SecretModel"/> with the unique identifier of the secret.</returns>
+    ///<inheritdoc />
     public async Task<SecretModel> CreateSecretAsync(string content, DateTimeOffset expirationDate,
         string publicPin, CancellationToken cancellationToken)
     {
@@ -46,13 +39,8 @@ public sealed class SecretService : ISecretService
         return secret;
     }
 
-    /// <summary>
-    /// Retrieves a secret.
-    /// </summary>
-    /// <param name="id">The id of the secret.</param>
-    /// <param name="pin">The pin of the secret.</param>
-    /// <param name="cancellationToken">The cancellation token.</param>
-    /// <returns>The content and description of the secret.</returns>
+
+    ///<inheritdoc />
     public async Task<string> GetSecretAsync(Guid id, string pin,
         CancellationToken cancellationToken)
     {
@@ -94,10 +82,8 @@ public sealed class SecretService : ISecretService
 
         return content;
     }
-
-    /// <summary>
-    /// Cleans up expired secrets.
-    /// </summary>
+    
+    ///<inheritdoc />
     public void CleanExpiredSecrets()
     {
         if (!Directory.Exists(_secretsFolder))
@@ -122,6 +108,6 @@ public sealed class SecretService : ISecretService
     private static long GetSecretIdAndExpDate(string secretPath)
     {
         var data = Path.GetFileNameWithoutExtension(secretPath).Split('-');
-        return Int64.Parse(data[1]);
+        return long.Parse(data[1]);
     }
 }

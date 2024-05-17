@@ -5,12 +5,24 @@ namespace SecretStoreHys.Api;
 /// <summary>
 /// Represents a job that cleans up expired secrets.
 /// </summary>
-public sealed class SecretsCleanerJob(
-    ISecretService secretService,
-    ILogger<SecretsCleanerJob> logger,
-    IConfiguration configuration)
-    : BackgroundService
+public sealed class SecretsCleanerJob : BackgroundService
 {
+    private readonly ISecretService _secretService;
+    private readonly ILogger<SecretsCleanerJob> _logger;
+    private readonly IConfiguration _configuration;
+
+    /// <summary>
+    /// Represents a job that cleans up expired secrets.
+    /// </summary>
+    public SecretsCleanerJob(ISecretService secretService,
+        ILogger<SecretsCleanerJob> logger,
+        IConfiguration configuration)
+    {
+        _secretService = secretService ?? throw new ArgumentNullException(nameof(secretService));
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+    }
+
     private const int DefaultCleanupIntervalSeconds = 40;
 
     /// <summary>
@@ -26,12 +38,12 @@ public sealed class SecretsCleanerJob(
             {
                 try
                 {
-                    secretService.CleanExpiredSecrets();
+                    _secretService.CleanExpiredSecrets();
                     await Task.Delay(GetCleanupInterval(), stoppingToken);
                 }
                 catch (Exception e)
                 {
-                    logger.LogError(e, "An error occurred while cleaning secrets");
+                    _logger.LogError(e, "An error occurred while cleaning secrets");
                 }
             }
         }, stoppingToken);
@@ -43,7 +55,7 @@ public sealed class SecretsCleanerJob(
     /// <returns>The interval as a <see cref="TimeSpan"/>.</returns>
     private TimeSpan GetCleanupInterval()
     {
-        var interval = configuration.GetValue<int>("SecretsCleanupIntervalInSeconds");
+        var interval = _configuration.GetValue<int>("SecretsCleanupIntervalInSeconds");
         return interval > 0 ? TimeSpan.FromSeconds(interval) : TimeSpan.FromSeconds(DefaultCleanupIntervalSeconds);
     }
 }
