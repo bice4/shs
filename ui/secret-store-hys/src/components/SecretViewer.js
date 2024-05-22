@@ -74,7 +74,7 @@ export default function SecretViewer() {
     <div className="flex flex-column">
       <Toast ref={toast} />
 
-      <div className="flex align-items-center justify-content-center font-bold m-2">
+      <div className="flex md:flex-auto align-items-center justify-content-center font-bold m-2">
         <h2 className="text-4xl">Secret store</h2>
       </div>
       {pinCodeVisible && (
@@ -102,17 +102,16 @@ export default function SecretViewer() {
         </div>
       )}
       {content !== null && content.length !== 0 && (
-        <div className="flex align-items-center justify-content-center font-bold m-2">
-          <div className="flex flex-column gap-2">
+        <div className="flex md:flex-auto align-items-center flex-column justify-content-center font-bold m-2">
+          <div className="flex md:flex-auto flex-column gap-2">
             <label htmlFor="username">Secret content</label>
             <InputTextarea
               id="username"
               aria-describedby="username-help"
+              style={{ resize: "none", width: "100%" }}
+              value={content}
               rows={10}
               cols={100}
-              style={{ resize: "none" }}
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
             />
           </div>
         </div>

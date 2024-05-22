@@ -141,31 +141,29 @@ export default function SecretCreator() {
   };
 
   return (
-    <div className="flex flex-column">
+    <div className="flex md:flex-auto flex-column font-bold">
       <Toast ref={toast} />
 
-      <div className="flex align-items-center justify-content-center font-bold m-2">
+      <div className="flex md:flex-auto align-items-center justify-content-center font-bold m-2">
         <h2 className="text-4xl">Secret store</h2>
       </div>
 
       {!isCreated && (
-        <div>
-          <div className="flex align-items-center justify-content-center font-bold m-2">
-            <div className="flex flex-column gap-2">
+        <div className="flex md:flex-auto align-items-center flex-column justify-content-center m-2">
+            <div className="flex md:flex-auto flex-column gap-2">
               <label htmlFor="username">Secret content</label>
               <InputTextarea
                 id="username"
                 aria-describedby="username-help"
+                style={{ resize: "none", width: "100%"}}
+                value={content}
                 rows={10}
                 cols={100}
-                style={{ resize: "none" }}
-                value={content}
                 onChange={(e) => setContent(e.target.value)}
               />
             </div>
-          </div>
-          <div className="flex align-items-center justify-content-center h-8rem font-bold m-2">
-            <div className="flex align-items-stretch flex-wrap">
+            
+            <div className="flex align-items-stretch flex-wrap m-3">
               <div className="flex align-items-center justify-content-center font-bold border-round m-2">
                 <div className="flex flex-column gap-2">
                   <label htmlFor="pwd1">Pin code (only numbers)</label>
@@ -203,7 +201,7 @@ export default function SecretCreator() {
                   />
                 </div>
               </div>
-            </div>
+           
           </div>
           <div className="flex align-items-center justify-content-center font-bold m-2">
             <Button label="Create" onClick={create} text />

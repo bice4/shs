@@ -7,8 +7,8 @@ export default function NotFound() {
       <div className="flex align-items-center justify-content-center h-4rem font-bold m-2">
         <h1>404 - Not Found</h1>
       </div>
-      <div className="flex align-items-center justify-content-center h-4rem font-bold m-2">
-        <Link className="p-button font-bold" id="home-link" to="/">
+      <div className="flex align-items-center justify-content-center h-4rem m-2">
+        <Link className="p-button  p-button-text" id="home-link" to="/">
           Home
         </Link>
       </div>
