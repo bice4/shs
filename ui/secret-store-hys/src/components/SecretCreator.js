@@ -32,6 +32,9 @@ export default function SecretCreator() {
 
   // create secret
   function create() {
+
+    console.log("API URL: ", process.env.REACT_APP_API_URL);
+
     // validate content. if empty, show error
     if (content === null || content.length === 0) {
       showError("Secret content can not be empty.");
