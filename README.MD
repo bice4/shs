@@ -125,7 +125,7 @@ Suppose you need to share some sensitive information and you really don't want t
     sudo systemctl restart nginx
     ```
 
-### Backend Update Procedure
+### :construction: Backend Update Procedure
 
 1. **Stop the Running Container:**
 
@@ -148,7 +148,7 @@ Suppose you need to share some sensitive information and you really don't want t
     docker run -d -p host-port:container-port --name your-container-name your-dockerhub-username/your-image-name
     ```
 
-### Frontend Update Procedure
+### :construction_worker: Frontend Update Procedure
 
 1. **Copy the New Build to the NGINX Folder:**
    
