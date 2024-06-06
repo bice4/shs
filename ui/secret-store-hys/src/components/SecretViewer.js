@@ -6,6 +6,8 @@ import React, { useState, useRef } from "react";
 import { Toast } from "primereact/toast";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { BlockUI } from "primereact/blockui";
+import { ProgressSpinner } from "primereact/progressspinner";
 
 // SecretViewer component to view a secret by providing a password
 // and show the secret content if the password is correct
@@ -16,6 +18,7 @@ export default function SecretViewer() {
   const [content, setContent] = useState("");
   const [pinCode, setPinCode] = useState("");
   const [pinCodeVisible, setPinCodeVisible] = useState(true);
+  const [isUiBlocked, setIsUiBlocked] = useState(false);
 
   // open secret
   function open() {
@@ -27,6 +30,8 @@ export default function SecretViewer() {
 
     // add cors header
     axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
+
+    setIsUiBlocked(true);
 
     // send get request to get secret
     axios
@@ -50,8 +55,12 @@ export default function SecretViewer() {
         setContent(response.data.secret);
         setPinCode("");
         setPinCodeVisible(false);
+        setIsUiBlocked(false);
       })
       .catch((e) => {
+        setIsUiBlocked(false);
+
+        // if response status is 404, show error secret is not found
         let errorMessage = "Something went wrong";
 
         if (e?.response?.data !== null) {
@@ -78,29 +87,32 @@ export default function SecretViewer() {
         <h2 className="text-4xl">Secret store</h2>
       </div>
       {pinCodeVisible && (
-        <div>
-          <div className="flex align-items-center justify-content-center h-8rem font-bold m-2">
-            <div className="flex align-items-stretch flex-wrap">
-              <div className="flex align-items-center justify-content-center font-bold border-round m-2">
-                <div className="flex flex-column gap-2">
-                  <label htmlFor="pwd1">Pin code (only numbers)</label>
+        <BlockUI blocked={isUiBlocked}>
+          <div>
+            <div className="flex align-items-center justify-content-center h-8rem font-bold m-2">
+              <div className="flex align-items-stretch flex-wrap">
+                <div className="flex align-items-center justify-content-center font-bold border-round m-2">
+                  <div className="flex flex-column gap-2">
+                    <label htmlFor="pwd1">Pin code (only numbers)</label>
 
-                  <InputOtp
-                    value={pinCode}
-                    onChange={(e) => setPinCode(e.value)}
-                    mask
-                    integerOnly
-                    length={6}
-                  />
+                    <InputOtp
+                      value={pinCode}
+                      onChange={(e) => setPinCode(e.value)}
+                      mask
+                      integerOnly
+                      length={6}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
+            <div className="flex align-items-center justify-content-center font-bold m-2">
+              <Button label="Open" onClick={open} text />
+            </div>
           </div>
-          <div className="flex align-items-center justify-content-center font-bold m-2">
-            <Button label="Open" onClick={open} text />
-          </div>
-        </div>
+        </BlockUI>
       )}
+      {isUiBlocked && <ProgressSpinner />}
       {content !== null && content.length !== 0 && (
         <div className="flex md:flex-auto align-items-center flex-column justify-content-center font-bold m-2">
           <div className="flex md:flex-auto flex-column gap-2">

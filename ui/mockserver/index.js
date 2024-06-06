@@ -39,9 +39,12 @@ app.get("/health", (_, res) => {
 });
 
 // define a route handler for the secret endpoint
-app.post("/api/Secret", (req, res) => {
+app.post("/api/Secret", async (req, res) => {
   console.log("Saving secret:\n ", req.body);
   const secret = req.body;
+
+  // simulate a delay if needed
+  await sleep(100);
 
   // validate secret
   if (secret.PublicPin === undefined || secret.Content === undefined) {
@@ -65,12 +68,15 @@ app.post("/api/Secret", (req, res) => {
 
 // define a route handler for the secret endpoint with id parameter and pin query parameter
 // e.g. /api/Secret/1?pin=1234
-app.get("/api/Secret/:id", (req, res) => {
+app.get("/api/Secret/:id", async (req, res) => {
   console.log(
     "Requesting secret with id:",
     req.params.id + " and pin:",
     req.query.pin
   );
+
+  // simulate a delay if needed
+  await sleep(100);
 
   const pin = req.query.pin;
   const secretId = req.params.id;
@@ -99,3 +105,9 @@ app.get("/api/Secret/:id", (req, res) => {
 app.listen(port, () => {
   console.log(`Mockserver is listening on port ${port}`);
 });
+
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}

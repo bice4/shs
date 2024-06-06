@@ -7,6 +7,8 @@ import { Toast } from "primereact/toast";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { InputOtp } from "primereact/inputotp";
+import { BlockUI } from "primereact/blockui";
+import { ProgressSpinner } from "primereact/progressspinner";
 
 // SecretCreator component to create a secret and show the secret link
 export default function SecretCreator() {
@@ -15,6 +17,7 @@ export default function SecretCreator() {
   const [secretLink, setSecretLink] = useState("");
   const [content, setContent] = useState("");
   const [pinCode, setPinCode] = useState("");
+  const [isUiBlocked, setIsUiBlocked] = useState(false);
 
   const [isCreated, setIsCreated] = useState(false);
 
@@ -32,7 +35,6 @@ export default function SecretCreator() {
 
   // create secret
   function create() {
-
     console.log("API URL: ", process.env.REACT_APP_API_URL);
 
     // validate content. if empty, show error
@@ -84,6 +86,7 @@ export default function SecretCreator() {
   }
 
   function sendRequest(content, pinCode, expireDate) {
+    setIsUiBlocked(true);
     // compose secret object
     const secret = {
       Content: content,
@@ -116,8 +119,10 @@ export default function SecretCreator() {
         setPinCode("");
         setMeasurementValue(10);
         setSelectedMeasurement({ name: "Minutes", code: "M" });
+        setIsUiBlocked(false);
       })
       .catch((_) => {
+        setIsUiBlocked(false);
         showError("Failed to create secret", "Error");
       });
   }
@@ -149,20 +154,21 @@ export default function SecretCreator() {
       </div>
 
       {!isCreated && (
-        <div className="flex md:flex-auto align-items-center flex-column justify-content-center m-2">
+        <BlockUI blocked={isUiBlocked}>
+          <div className="flex md:flex-auto align-items-center flex-column justify-content-center m-2">
             <div className="flex md:flex-auto flex-column gap-2">
               <label htmlFor="username">Secret content</label>
               <InputTextarea
                 id="username"
                 aria-describedby="username-help"
-                style={{ resize: "none", width: "100%"}}
+                style={{ resize: "none", width: "100%" }}
                 value={content}
                 rows={10}
                 cols={100}
                 onChange={(e) => setContent(e.target.value)}
               />
             </div>
-            
+
             <div className="flex align-items-stretch flex-wrap m-3">
               <div className="flex align-items-center justify-content-center font-bold border-round m-2">
                 <div className="flex flex-column gap-2">
@@ -201,14 +207,14 @@ export default function SecretCreator() {
                   />
                 </div>
               </div>
-           
+            </div>
+            <div className="flex align-items-center justify-content-center font-bold m-2">
+              <Button label="Create" onClick={create} text />
+            </div>
           </div>
-          <div className="flex align-items-center justify-content-center font-bold m-2">
-            <Button label="Create" onClick={create} text />
-          </div>
-        </div>
+        </BlockUI>
       )}
-
+      {isUiBlocked && <ProgressSpinner />}
       {secretLink !== null && secretLink.length > 0 && (
         <div>
           <div className="flex align-items-center justify-content-center font-bold m-2">
