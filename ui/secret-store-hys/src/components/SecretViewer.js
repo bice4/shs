@@ -84,7 +84,7 @@ export default function SecretViewer() {
       <Toast ref={toast} />
 
       <div className="flex md:flex-auto align-items-center justify-content-center font-bold m-2">
-        <h2 className="text-4xl">Secret store</h2>
+        <h2 className="text-4xl">Secret store demo</h2>
       </div>
       {pinCodeVisible && (
         <BlockUI blocked={isUiBlocked}>
